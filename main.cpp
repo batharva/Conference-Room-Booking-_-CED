@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
+#include <cstdlib>
 using namespace std;
 void clearScreen() {
     this_thread::sleep_for(chrono::seconds(1)); // Delay of 1 second
@@ -13,12 +14,33 @@ void clearScreen() {
     system("clear");
 #endif
 }
-bool exit_completely=1;
+//Variables And Data Storage
 bool current_user;
+string name_current_user;
 vector<vector<string>> use_pass={{"admin","admin@123"}};
 int flag=0;
-vector<string> rooms={"Abheri","Basant","Kedar","Sahana","Malhar","Des","Bhairav"};
+vector<string> rooms={"LHC_CR-211.","Academic_Building-1.","Academic_Building-2.","Central_Library_TC-1."};
 vector<int> time_slots;
+struct Reservation {
+    int sr;
+    string userName;
+    string roomName;
+    int startTime;
+    int endTime;
+    string date;
+};
+vector<Reservation> reservations ;
+void print_data(const vector<Reservation>& reservations) {
+    cout << "Sr No.\tUsername\tRoom Name\tStart Time (24 hrs format)\tEnd Time (24 hrs format)\tDate" << endl;
+    for (const auto& res : reservations) {
+        cout << res.sr << "\t"
+             << res.userName << "\t\t"
+             << res.roomName << "\t\t"
+             << res.startTime << "\t\t\t\t"
+             << res.endTime << "\t\t\t\t"
+             << res.date << endl;
+    }
+}
 void sign_up(vector<vector<string>> &use_pass) {
     clearScreen();
     cout << "Home Screen. > Sign Up.\n\n";
@@ -29,7 +51,6 @@ void sign_up(vector<vector<string>> &use_pass) {
     cin >> password;
     use_pass.push_back({username, password});
 }
-
 void login(const vector<vector<string>> &use_pass) {
     clearScreen();
     cout << "Home Screen. > Login.\n\n";
@@ -54,6 +75,7 @@ void login(const vector<vector<string>> &use_pass) {
     }
 
     if (found) {
+        name_current_user=username;
         cout << "Login successful!" << endl;
     } else {
         cout << "Login failed. Try again."<<endl;
@@ -61,36 +83,28 @@ void login(const vector<vector<string>> &use_pass) {
     }
     
 }
-
-void home_screen(int flag,vector<vector<string>> &use_pass){
+void home_screen(vector<vector<string>> &use_pass){
     int choice_login;
-    do {
         clearScreen();
         cout<<"Welcome To Indian Insitute Of Technology Tirupati!!!\n\nThis is a Conference Hall Booking Individual Project For Engineering And Design Course.\nName:Atharva Bhosale.\nRoll No: ME24B005.\n\n";
         cout<<"Home Screen.\n\n";
-        cout << "1. Sign Up\n2. Login\n3. Exit\nEnter your choice: ";
+        cout << "1. Sign Up.\n2. Login.\nEnter your choice: ";
         cin >> choice_login;
 
         switch(choice_login) {
             case 1:
                 sign_up(use_pass);
-                flag=1;
+                home_screen(use_pass);
                 break;
 
             case 2:
                 login(use_pass);
-                flag=0;
-                break;
-            case 3:
-                cout << "Exiting..." << endl;
-                exit_completely=0;
-                flag=0;
                 break;
             default:
-                cout << "Invalid choice. Try again." << endl;
-                flag=1;
+                cout << "Invalid choice. Try again." <<endl;
+                exit(0);
+                
         }
-    } while (flag);
 }
 void addRoom(vector<string> &rooms){
     clearScreen();
@@ -153,23 +167,74 @@ void removeRoom(vector<string> &rooms){
     }
     
 }
-void reserveRoom(){
+void reserveRoom() {
     clearScreen();
+    if (current_user) {
+        cout << "Home Screen. > Login. > Admin. > Reserve Room.\n\n";
+    } else {
+        cout << "Home Screen. > Login. > Normal User. > Reserve Room.\n\n";
+    }
+    for (int i = 1; i <=rooms.size(); i++)
+    {
+        cout<<i<<"."<<rooms[i-1]<<endl;
+    }
+    
+    print_data(reservations);
+    Reservation newReservation;
+    newReservation.userName = name_current_user;
+    newReservation.sr = reservations.size()+1;
+    cout << "Enter Room Name (Replace ' ' with '_'): ";
+    cin >> newReservation.roomName;
+    cout << "Enter Start Time (24 hrs format): ";
+    cin >> newReservation.startTime;
+    cout << "Enter End Time (24 hrs format): ";
+    cin >> newReservation.endTime;
+    cout << "Enter Date (DD-MM-YYYY): ";
+    cin >> newReservation.date;
+
+    reservations.push_back(newReservation);
 }
 void cancleRoom(){
     clearScreen();
+    if (current_user)
+    {
+        cout<<"Home Screen. > Login. > Admin. > Cancle Room.\n\n";
+    }else{
+        cout<<"Home Screen. > Login. > Admin. > Cancle Room.\n\n";
+    }
+    print_data(reservations);
+    int cancle;
+    cout<<"\n\nEntre Sr No To Cancle Reservation:";
+    cin>>cancle;
+    auto it1 = find_if(reservations.begin(), reservations.end(), [cancle](const Reservation& res) { return res.sr == cancle; });
+    if (it1 != reservations.end()) {
+        reservations.erase(it1);
+    }
+    for (int i = 1; i <=reservations.size(); i++) {
+        reservations[i-1].sr = i;
+    }
+    cout<<"\n\n";
+    print_data(reservations);
 }
 void displayTimeSlots(){
     clearScreen();
+    if (current_user)
+    {
+        cout<<"Home Screen. > Login. > Admin. > Display Reserved Time Slots.\n\n";
+    }else{
+        cout<<"Home Screen. > Login. > Normal User. > Display Reserved Time Slots.\n\n";
+    }
+    print_data(reservations);
+    
 }
-void main_menu(int flag,vector<string> &rooms){
+void main_menu(vector<string> &rooms){
     clearScreen();
     int exit;
     int choice_menue;
     if (current_user)
     {
         cout<<"Hoeme Screen. > Login. > Admin.\n\n"<<endl;
-        cout<<"1.Add Room.\n2.Remove Room\n3.Reserve Room.\n4.Cancle Room.\n5.Display Rooms.\n6.Display Time Slots.\n\nEntre Your Choice:"<<endl;
+        cout<<"1.Add Room.\n2.Remove Room\n3.Reserve Room.\n4.Cancle Room.\n5.Display Rooms.\n6.Display Reserved Time Slots.\n7.Return To Home Screen.\n\nEntre Your Choice:"<<endl;
         cin>>choice_menue;
         do{
             switch (choice_menue)
@@ -180,7 +245,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -190,7 +255,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -200,7 +265,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -210,7 +275,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -220,7 +285,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -230,13 +295,13 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
             case 7:
                 if (choice_menue==7)
                 {
-                    home_screen(flag,use_pass);
+                    // home_screen(use_pass);
                 }
                 break;
             default:
@@ -249,7 +314,7 @@ void main_menu(int flag,vector<string> &rooms){
     {
         
         cout<<"Home Screen. > Login. > Normal User.\n\n"<<endl;
-        cout<<"1.Reserve Room.\n2.Cancle Room.\n3.Display Rooms.\n4.Display Time Slots.\n5.Return To Home Screen.\n\nEntre Your Choice:"<<endl;
+        cout<<"1.Reserve Room.\n2.Cancle Room.\n3.Display Rooms.\n4.Display Reserved Time Slots.\n5.Return To Home Screen.\n\nEntre Your Choice:"<<endl;
         cin>>choice_menue;
         do{
             switch (choice_menue)
@@ -260,7 +325,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -270,7 +335,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
 
@@ -281,7 +346,7 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 
 
@@ -293,13 +358,13 @@ void main_menu(int flag,vector<string> &rooms){
                 cin>>exit;
                 if (exit)
                 {
-                    main_menu(flag,rooms);
+                    main_menu(rooms);
                 }
                 break;
             case 5:
                 if (choice_menue==5)
                 {
-                    home_screen(flag,use_pass);
+                    // home_screen(use_pass);
                 }
                 break;
             default:
@@ -311,11 +376,13 @@ void main_menu(int flag,vector<string> &rooms){
     }
 }
 int main() {
-    home_screen(flag,use_pass);
-    if (exit_completely)
+    while (1)
     {
-        main_menu(0,rooms);
+        home_screen(use_pass);
+        main_menu(rooms);
     }
+    
+    
     
     
     return 0;
