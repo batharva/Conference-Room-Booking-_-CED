@@ -136,9 +136,8 @@ void addRoom(vector<string>& rooms) {
     }
     int no_room_add; // Number of rooms to add
     string new_room; // Variable to hold new room name
-    cout << "Enter Number Of Rooms To Add: ";
+    cout << "Enter No_Of_Rooms_To_Add Names(Separated By ' '): ";
     cin >> no_room_add; // Get number of rooms
-    cout << "Enter Name Of Rooms Separated By Spaces: ";
     while (no_room_add--) {
         cin >> new_room; // Get room names
         rooms.push_back(new_room); // Add to rooms vector
@@ -173,11 +172,10 @@ void removeRoom(vector<string>& rooms) {
     displayRooms(rooms); // Show current rooms
     int no_room_remove; // Number of rooms to remove
     string remove_room; // Room name to remove
-    cout << "\nEnter Number Of Rooms To Remove: " << endl;
+    cout << "\nEnter No_Of_Rooms Name(Separated By ' '): " << endl;
     cin >> no_room_remove; // Get number of rooms to remove
     
     while (no_room_remove--) {
-        cout << "Enter Which Room To Remove: ";
         cin >> remove_room; // Get room name to remove
         auto remov = find(rooms.begin(), rooms.end(), remove_room); // Find the room
         rooms.erase(remov); // Remove the room from the list
@@ -201,13 +199,10 @@ void reserveRoom() {
     Reservation newReservation; // Create a new reservation
     newReservation.userName = name_current_user; // Set the username
     newReservation.sr = reservations.size() + 1; // Set serial number
-    cout << "Enter Room Name (Replace ' ' with '_'): ";
+    cout << "Enter 'Room_Name Start_Time End_Time Date: ";
     cin >> newReservation.roomName; // Get room name
-    cout << "Enter Start Time (24 hrs format): ";
     cin >> newReservation.startTime; // Get start time
-    cout << "Enter End Time (24 hrs format): ";
     cin >> newReservation.endTime; // Get end time
-    cout << "Enter Date (DD-MM-YYYY): ";
     cin >> newReservation.date; // Get reservation date
 
     reservations.push_back(newReservation); // Add reservation to list
