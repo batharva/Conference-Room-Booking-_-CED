@@ -13,5 +13,5 @@ This project is designed to facilitate the booking of conference rooms. It inclu
 Code written by Atharva B (ME).
 
 ## How To Execute The Code?
-Windows User: Directly download the project.exe file double click and open to run it.
-Linux User: Directly download the project.out file , open terminal locate the folder and type ./project.out 
+1. Windows User: Directly download the project.exe file double click and open to run it.
+2. Linux User: Directly download the project.out file , open terminal locate the folder and type ./project.out 
