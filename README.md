@@ -1,4 +1,4 @@
-# Conference Room Booking Project
+# Conference Room Booking Project (Semistern-1 CED)
 This project is designed to facilitate the booking of conference rooms. It includes functionalities for user sign-up, login, and room reservation. The project also distinguishes between admin and normal users, granting different levels of access and control.
 ## Group Members
 1. Atharva (ME)  
