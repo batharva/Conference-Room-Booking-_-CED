@@ -1,5 +1,6 @@
 # Conference Room Booking Project (Semistern-1 CED)
 This project is designed to facilitate the booking of conference rooms. It includes functionalities for user sign-up, login, and room reservation. The project also distinguishes between admin and normal users, granting different levels of access and control.
+
 ## Group Members
 1. Atharva (ME)  
 2. Anhushree (CH)  
@@ -10,3 +11,7 @@ This project is designed to facilitate the booking of conference rooms. It inclu
 
 ## Code Contribution
 Code written by Atharva B (ME).
+
+## How To Execute The Code?
+Windows User: Directly download the project.exe file double click and open to run it.
+Linux User: Directly download the project.out file , open terminal locate the folder and type ./project.out 
