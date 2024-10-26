@@ -231,16 +231,16 @@ void reserveRoom() {
     //Time Check
     if (!(newReservation.startTime>=0 &&newReservation.startTime<25))
     {
-        inputcheck(newReservation.startTime,"Start Time");
+        newReservation.startTime=inputcheck(newReservation.startTime,"Start Time");
     }
     if (!(newReservation.endTime>=0 &&newReservation.endTime<25))
     {
-        inputcheck(newReservation.endTime,"End Time");
+        newReservation.endTime=inputcheck(newReservation.endTime,"End Time");
     }
 
     if (newReservation.startTime > newReservation.endTime)
     {
-        inputcheck(newReservation.startTime,"Start Time");   
+        newReservation.startTime=inputcheck(newReservation.startTime,"Start Time");   
     }
     
     
